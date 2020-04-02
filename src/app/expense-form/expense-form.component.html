@@ -1,0 +1,36 @@
+<div class="form-control">
+    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+        <div class="form-group" [ngClass]="{ 'has-error': invalidExpenseType() }"> <!-- Expense Type -->
+            <label for="expense_type" class="control-label">Expense Type</label>
+            <input type="text" class="form-control" id="expense_type" name="expense_type" placeholder="Electricity">
+            <p *ngIf="invalidExpenseType()" id="expense_type_error" class="help-block">Invalid Expense Type.</p>
+        </div>
+    
+        <div class="form-group" [ngClass]="{ 'has-error': invalidValue()}"> <!-- Value  -->
+            <label for="value" class="control-label">Value</label>
+            <input type="number" class="form-control" id="value" name="value" placeholder="Toha">
+            <p *ngIf = "invalidValue()" id="value_error" class="help-block">Invalid Value.</p>
+        </div>
+    
+        <div class="form-group" [ngClass]="{ 'has-error': invalidDate()}">  
+            <label for="date" class="control-label">Date</label>
+            <input class="form-control" id="date" name="date" [matDatepicker]="myDatepicker">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+            <p *ngIf = "invalidDate()" id="date_error" class="help-block">Invalid Dates</p>
+        </div>
+                                
+        <div class="form-group has-error"> <!-- Comments -->
+            <label for="comment" class="control-label">Comments</label>
+            <input type="text" class="form-control" id="comment" name="comment" placeholder="">
+        </div>
+        <div>
+            <ul *ngFor = "let expenseType of expenseTypes">
+                <li>{{expenseType.name}}</li>
+                <li>{{expenseType.comment}}</li>
+            </ul>
+        </div>
+    
+    </form>	
+</div>
+
