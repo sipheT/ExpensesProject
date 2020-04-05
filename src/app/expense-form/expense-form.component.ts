@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ExpenseTypesService } from '../services/expense-types.service';
 import { ExpenseType } from '../ExpenseType';
+import { Expense } from '../expense';
+import { ExpenseModel } from '../expenseModel';
+import { ExpenseFormService } from '../services/expense-form-service.service';
+import { NotificationService } from '../services/notification.service';
+
 
 @Component({
   selector: 'app-expense-form',
@@ -9,52 +13,60 @@ import { ExpenseType } from '../ExpenseType';
   styleUrls: ['./expense-form.component.css']
 })
 export class ExpenseFormComponent implements OnInit {
-  expenseForm: FormGroup;
+  
   submitted = false;
   expenseTypes: ExpenseType[] = [];
+  expenses: ExpenseModel[] = [];
 
-  constructor(private formBuilder: FormBuilder, private expenseTypesService: ExpenseTypesService) { 
-    expenseTypesService.getAllExpenseTypes().subscribe((res: ExpenseType[]) => {
+  constructor(private expenseTypesService: ExpenseTypesService, private expenseFormService: ExpenseFormService, private notificationService: NotificationService) { 
+    
+  }
+  ngOnInit() {
+    
+    this.getAllExpenseTypes();
+    
+  }
+
+  getAllExpenseTypes(){
+    this.expenseTypesService.getAllExpenseTypes().subscribe((res: ExpenseType[]) => {
       this.expenseTypes = res;
-      console.log("The actual data: "+ this.expenseTypes);
+      //console.log("The actual data: "+ this.expenseTypes);
     });
   }
-  invalidExpenseType()
-  {
-  	return (this.submitted && this.expenseForm.controls.expense_type.errors != null);
-  }
 
-  invalidValue()
-  {
-  	return (this.submitted && this.expenseForm.controls.value.errors != null);
-  }
-
-  invalidDate()
-  {
-  	return (this.submitted && this.expenseForm.controls.date.errors != null);
-  }
-
-  invalidComment()
-  {
-  	return (this.submitted && this.expenseForm.controls.comment.errors != null);
-  }
-
-  ngOnInit() {
-    this.expenseForm = this.formBuilder.group({
-  		expense_type: ['', Validators.required],
-  		value: ['', Validators.required],
-  		date: ['', [Validators.required, Validators.email]],
-  	});
+  getAllExpenses(){
+    this.expenseTypesService.getAllExpenses().subscribe((res: Expense[]) => {
+      for(let i = 0; i < res.length; i++){
+        let expenseType = this.expenseTypes.find(x => x.id == res[i].expenseTypeId).name;
+        let expense = new ExpenseModel(res[i].id, expenseType, res[i].value, res[i].date, res[i].comment);
+        this.expenses[i] = expense;
+      }
+      //console.log("All Expenses: "+ this.expenses);
+    });
   }
 
   onSubmit()
   {
-  	this.submitted = true;
+    let expenseTypeId = this.expenseTypes.find(x => x.name == this.expenseFormService.expenseForm.value.expensetype).id;
+    let expense: Expense = new Expense(
+      1, 
+      expenseTypeId,
+      this.expenseFormService.expenseForm.value.value,
+      this.expenseFormService.expenseForm.value.date,
+      this.expenseFormService.expenseForm.value.comment
+    );
+    this.expenseTypesService.insertExpenseEntry(expense).subscribe(()=>{
+        this.getAllExpenseTypes()
+    });
+    this.notificationService.success('Expense Successfully added!');
+    this.expenseFormService.expenseForm.reset();
+    this.submitted = true;
+    
+  }
 
-  	if(this.expenseForm.invalid == true)
-  	{
-  		return;
-  	}
+  onClear(){
+    this.expenseFormService.expenseForm.reset();
+    this.expenseFormService.initializeFormGroup();
   }
 
 }

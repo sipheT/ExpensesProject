@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ExpenseType } from '../ExpenseType';
-
+import { ExpenseModel } from '../expenseModel';
+import { Expense } from '../expense';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +12,19 @@ import { ExpenseType } from '../ExpenseType';
 export class ExpenseTypesService {
   constructor(private http: HttpClient) { }
 
-  private expenseTypesURL: string = 'http://localhost:8080/api/expenses';
+  private apiURL: string = 'http://localhost:8080';
+
+  getAllExpenses(){
+    return this.http.get(this.apiURL+"/api/expenses");
+  }
+
   getAllExpenseTypes(){
     // now returns an Observable of Config
-    return this.http.get(this.expenseTypesURL);
+    return this.http.get(this.apiURL+"/api/expensetypes");
   }
+
+  insertExpenseEntry(expense){
+    return this.http.post<Expense>(this.apiURL+"/api/expenses", expense);
+  }
+
 }

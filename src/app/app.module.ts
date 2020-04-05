@@ -4,15 +4,16 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 
 import { AppComponent } from './app.component';
+import { DataTableComponent } from './data-table/data-table.component';
 import { ExpenseFormComponent } from './expense-form/expense-form.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule  } from '@angular/material/core'
+import { MaterialModule } from './material/material.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ExpenseFormComponent
+    ExpenseFormComponent,
+    DataTableComponent
   ],
   imports: [
     BrowserModule,
@@ -20,11 +21,10 @@ import { MatNativeDateModule  } from '@angular/material/core'
     ReactiveFormsModule,
     NoopAnimationsModule,
     HttpClientModule,
-
-    MatDatepickerModule,
-    MatNativeDateModule
+    MaterialModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ExpenseFormComponent]
 })
 export class AppModule { }

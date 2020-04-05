@@ -1,7 +1,7 @@
-export class Expense {
+export class ExpenseModel {
     constructor(
         public id: number,
-        public expenseTypeId: number,
+        public expenseType: string,
         public value: number,
         public date: Date,
         public comment: string) { }

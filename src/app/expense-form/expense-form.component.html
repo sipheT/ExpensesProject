@@ -1,36 +1,43 @@
 <div class="form-control">
-    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
-        <div class="form-group" [ngClass]="{ 'has-error': invalidExpenseType() }"> <!-- Expense Type -->
-            <label for="expense_type" class="control-label">Expense Type</label>
-            <input type="text" class="form-control" id="expense_type" name="expense_type" placeholder="Electricity">
-            <p *ngIf="invalidExpenseType()" id="expense_type_error" class="help-block">Invalid Expense Type.</p>
+    <form [formGroup]="expenseFormService.expenseForm" class="normal-form">
+      
+        <mat-grid-list cols="2" rowHeight="150px">
+          <mat-grid-tile>
+            <div class="controles-container">
+              <mat-form-field>
+                <mat-select formControlName="expensetype" matInput placeholder="Expense Type*">
+                    <mat-option *ngFor="let expenseType of expenseTypes" [value]="expenseType.name">
+                      {{expenseType.name}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>This field is mandatory.</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input formControlName="value" type="number"matInput placeholder="Value*">
+                <mat-error>This field is mandatory.</mat-error>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="controles-container">
+              <mat-form-field>
+                <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Date*">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error>This field is mandatory.</mat-error>
+                <!-- <mat-error *ngIf="service.form.controls['mobile'].errors?.minlength">Minimum 8 charactors needed.</mat-error> -->
+              </mat-form-field>
+              <mat-form-field>
+                <textarea type="text" matInput placeholder="Comment" formControlName="comment" class="md-textarea-auto form-control" mdbInput></textarea>
+                <!-- <input formControlName="comment" > -->
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <div class="button-row">
+          <button mat-raised-button color="primary" type="submit" (click)="onSubmit()" [disabled]="expenseFormService.expenseForm.invalid">Submit</button>
+          <button mat-raised-button color="warn" (click)="onClear()">Clear</button>
         </div>
-    
-        <div class="form-group" [ngClass]="{ 'has-error': invalidValue()}"> <!-- Value  -->
-            <label for="value" class="control-label">Value</label>
-            <input type="number" class="form-control" id="value" name="value" placeholder="Toha">
-            <p *ngIf = "invalidValue()" id="value_error" class="help-block">Invalid Value.</p>
-        </div>
-    
-        <div class="form-group" [ngClass]="{ 'has-error': invalidDate()}">  
-            <label for="date" class="control-label">Date</label>
-            <input class="form-control" id="date" name="date" [matDatepicker]="myDatepicker">
-            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
-            <mat-datepicker #myDatepicker></mat-datepicker>
-            <p *ngIf = "invalidDate()" id="date_error" class="help-block">Invalid Dates</p>
-        </div>
-                                
-        <div class="form-group has-error"> <!-- Comments -->
-            <label for="comment" class="control-label">Comments</label>
-            <input type="text" class="form-control" id="comment" name="comment" placeholder="">
-        </div>
-        <div>
-            <ul *ngFor = "let expenseType of expenseTypes">
-                <li>{{expenseType.name}}</li>
-                <li>{{expenseType.comment}}</li>
-            </ul>
-        </div>
-    
-    </form>	
+      </form>
 </div>
 
