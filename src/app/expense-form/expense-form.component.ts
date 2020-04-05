@@ -5,6 +5,8 @@ import { Expense } from '../expense';
 import { ExpenseModel } from '../expenseModel';
 import { ExpenseFormService } from '../services/expense-form-service.service';
 import { NotificationService } from '../services/notification.service';
+import { MatDialogRef } from '@angular/material';
+import { MatToolbar } from '@angular/material/toolbar';
 
 
 @Component({
@@ -17,8 +19,12 @@ export class ExpenseFormComponent implements OnInit {
   submitted = false;
   expenseTypes: ExpenseType[] = [];
   expenses: ExpenseModel[] = [];
+  newEntry: boolean = true; 
 
-  constructor(private expenseTypesService: ExpenseTypesService, private expenseFormService: ExpenseFormService, private notificationService: NotificationService) { 
+  constructor(private expenseTypesService: ExpenseTypesService, 
+              private expenseFormService: ExpenseFormService, 
+              private notificationService: NotificationService,
+              public matDialogRef: MatDialogRef<ExpenseFormComponent>) { 
     
   }
   ngOnInit() {
@@ -47,26 +53,45 @@ export class ExpenseFormComponent implements OnInit {
 
   onSubmit()
   {
+
     let expenseTypeId = this.expenseTypes.find(x => x.name == this.expenseFormService.expenseForm.value.expensetype).id;
     let expense: Expense = new Expense(
-      1, 
+      this.expenseFormService.expenseForm.value.id, 
       expenseTypeId,
       this.expenseFormService.expenseForm.value.value,
       this.expenseFormService.expenseForm.value.date,
       this.expenseFormService.expenseForm.value.comment
     );
-    this.expenseTypesService.insertExpenseEntry(expense).subscribe(()=>{
+    if(this.expenseFormService.expenseForm.value.id==null){
+      this.expenseTypesService.insertExpenseEntry(expense).subscribe(()=>{
+          this.getAllExpenseTypes();
+      });
+
+      this.notificationService.success('Expense Successfully added!');
+    }
+    else{
+      this.expenseTypesService.updateExpenseEntry(expense).subscribe(()=>{
         this.getAllExpenseTypes()
-    });
-    this.notificationService.success('Expense Successfully added!');
+      });
+
+      this.notificationService.success('Expense Successfully updated!');
+    }
+    this.onClose();
+    
     this.expenseFormService.expenseForm.reset();
-    this.submitted = true;
+    
     
   }
 
   onClear(){
     this.expenseFormService.expenseForm.reset();
     this.expenseFormService.initializeFormGroup();
+  }
+
+  onClose(){
+    this.expenseFormService.expenseForm.reset();
+    this.expenseFormService.initializeFormGroup();
+    this.matDialogRef.close();
   }
 
 }

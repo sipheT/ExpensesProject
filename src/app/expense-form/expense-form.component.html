@@ -1,3 +1,8 @@
+<mat-toolbar>
+  <span>{{expenseFormService.expenseForm.controls['id'].value == null? "New Expense": "Modify Expense"}}</span>
+  <span class="fill-remaining-space"></span>
+  <button class="btn-dialog-close" mat-stroked-button (click) = "onClose()" tabindex="-1"><mat-icon>clear</mat-icon></button>
+</mat-toolbar>
 <div class="form-control">
     <form [formGroup]="expenseFormService.expenseForm" class="normal-form">
       

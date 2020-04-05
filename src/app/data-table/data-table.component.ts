@@ -5,9 +5,11 @@ import { MatTable } from '@angular/material/table';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 import { DataTableDataSource, DataTableItem } from './data-table-datasource';
 import { ExpenseTypesService } from '../services/expense-types.service';
+import { ExpenseFormService } from '../services/expense-form-service.service';
 import { ExpenseType } from '../ExpenseType';
 import { Expense } from '../expense';
 import { ExpenseFormComponent } from '../expense-form/expense-form.component';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-data-table',
@@ -26,7 +28,10 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   expenses: DataTableItem[] = [];
   searchKey: string = "";
 
-  constructor(private expenseTypesService: ExpenseTypesService, public matDialog: MatDialog) { 
+  constructor(private expenseTypesService: ExpenseTypesService, 
+    private expenseFormService: ExpenseFormService,
+    public matDialog: MatDialog,
+    private notificationService: NotificationService) { 
   }
 
   ngOnInit() {
@@ -64,7 +69,26 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   }
 
   onCreate(){
-    this.matDialog.open(ExpenseFormComponent);
+    const matDialogConfig: MatDialogConfig = new MatDialogConfig();
+    matDialogConfig.disableClose = true;
+    matDialogConfig.autoFocus = true;
+    this.matDialog.open(ExpenseFormComponent, matDialogConfig);
+    
+  }
+
+  onEdit(row){
+    this.expenseFormService.populateForm(row);
+    const matDialogConfig: MatDialogConfig = new MatDialogConfig();
+    matDialogConfig.disableClose = true;
+    matDialogConfig.autoFocus = true;
+    this.matDialog.open(ExpenseFormComponent, matDialogConfig);
+  }
+
+  onDelete(id){
+    this.expenseTypesService.deleteExpenseEntry(id).subscribe(()=>{
+      //this.getAllExpenseTypes();
+      this.notificationService.success('Expense Successfully deleted!');
+    });
   }
 
   ngAfterViewInit() {

@@ -27,4 +27,12 @@ export class ExpenseTypesService {
     return this.http.post<Expense>(this.apiURL+"/api/expenses", expense);
   }
 
+  updateExpenseEntry(expense){
+    return this.http.put<Expense>(this.apiURL+"/api/expenses/"+expense.id, expense)
+  }
+
+  deleteExpenseEntry(id){
+    return this.http.delete(this.apiURL+"/api/expenses/"+id)
+  }
+
 }
