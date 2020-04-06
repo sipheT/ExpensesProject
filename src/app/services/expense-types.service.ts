@@ -27,12 +27,24 @@ export class ExpenseTypesService {
     return this.http.post<Expense>(this.apiURL+"/api/expenses", expense);
   }
 
+  insertExpenseType(expenseType){
+    return this.http.post<ExpenseType>(this.apiURL+"/api/expensetypes", expenseType);
+  }
+
   updateExpenseEntry(expense){
     return this.http.put<Expense>(this.apiURL+"/api/expenses/"+expense.id, expense)
   }
 
+  updateExpenseType(expenseType){
+    return this.http.put<ExpenseType>(this.apiURL+"/api/expensetypes/"+expenseType.id, expenseType)
+  }
+
   deleteExpenseEntry(id){
     return this.http.delete(this.apiURL+"/api/expenses/"+id)
+  }
+
+  deleteExpenseType(id){
+    return this.http.delete(this.apiURL+"/api/expensetypes/"+id)
   }
 
 }

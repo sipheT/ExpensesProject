@@ -70,7 +70,7 @@ export class ExpenseTypeDataSource extends DataSource<DataTableItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'ExpenseType': return compare(a.Name, b.Name, isAsc);
+        case 'Name': return compare(a.Name, b.Name, isAsc);
         case 'Id': return compare(+a.Id, +b.Id, isAsc);;
         default: return 0;
       }

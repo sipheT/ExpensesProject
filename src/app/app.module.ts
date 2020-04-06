@@ -11,13 +11,15 @@ import { MaterialModule } from './material/material.module';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { ExpenseTypesListComponent } from './expense-types-list/expense-types-list.component';
+import { ExpenseTypeFormComponent } from './expense-type-form/expense-type-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExpenseFormComponent,
     DataTableComponent,
-    ExpenseTypesListComponent
+    ExpenseTypesListComponent,
+    ExpenseTypeFormComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +33,6 @@ import { ExpenseTypesListComponent } from './expense-types-list/expense-types-li
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ExpenseFormComponent]
+  entryComponents: [ExpenseFormComponent, ExpenseTypeFormComponent]
 })
 export class AppModule { }

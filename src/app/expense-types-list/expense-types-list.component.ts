@@ -5,10 +5,10 @@ import { MatTable } from '@angular/material/table';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 import { ExpenseTypeDataSource, DataTableItem } from './expense-type-datasource';
 import { ExpenseTypesService } from '../services/expense-types.service';
-import { ExpenseFormService } from '../services/expense-form-service.service';
+import { ExpenseTypeFormService } from '../services/expense-type-form.service';
 import { ExpenseType } from '../ExpenseType';
 import { Expense } from '../expense';
-import { ExpenseFormComponent } from '../expense-form/expense-form.component';
+import { ExpenseTypeFormComponent } from '../expense-type-form/expense-type-form.component';
 import { NotificationService } from '../services/notification.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class ExpenseTypesListComponent implements AfterViewInit, OnInit {
   searchKey: string = "";
 
   constructor(private expenseTypesService: ExpenseTypesService, 
-    private expenseFormService: ExpenseFormService,
+    private expenseTypeFormService: ExpenseTypeFormService,
     public matDialog: MatDialog,
     private notificationService: NotificationService) { 
   }
@@ -45,7 +45,7 @@ export class ExpenseTypesListComponent implements AfterViewInit, OnInit {
         };
         this.expenseTypes[i] = expenseType;
       }
-
+      this.dataSource.data = this.expenseTypes;
       //console.log("The actual data: "+ this.expenseTypes);
     });
     
@@ -62,22 +62,22 @@ export class ExpenseTypesListComponent implements AfterViewInit, OnInit {
     const matDialogConfig: MatDialogConfig = new MatDialogConfig();
     matDialogConfig.disableClose = true;
     matDialogConfig.autoFocus = true;
-    this.matDialog.open(ExpenseFormComponent, matDialogConfig);
+    this.matDialog.open(ExpenseTypeFormComponent, matDialogConfig);
     
   }
 
   onEdit(row){
-    this.expenseFormService.populateForm(row);
+    this.expenseTypeFormService.populateForm(row);
     const matDialogConfig: MatDialogConfig = new MatDialogConfig();
     matDialogConfig.disableClose = true;
     matDialogConfig.autoFocus = true;
-    this.matDialog.open(ExpenseFormComponent, matDialogConfig);
+    this.matDialog.open(ExpenseTypeFormComponent, matDialogConfig);
   }
 
   onDelete(id){
-    this.expenseTypesService.deleteExpenseEntry(id).subscribe(()=>{
+    this.expenseTypesService.deleteExpenseType(id).subscribe(()=>{
       //this.getAllExpenseTypes();
-      this.notificationService.success('Expense Successfully deleted!');
+      this.notificationService.success('Expense Type Successfully deleted!');
     });
   }
 
