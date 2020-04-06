@@ -1,11 +1,17 @@
 
 <div class="container">
   <mat-toolbar>
+    <div>
+      <a mat-button routerLink=""> Expenses </a>
+      <a mat-button routerLink="/expensetypes"> Expense Types </a>
+      <a mat-button> Graphs </a>
+    </div>
     <span class="fill-remaining-space"></span>
     <span>Expense Application</span>
     <span class="fill-remaining-space"></span>
   </mat-toolbar>
-  <app-data-table></app-data-table>
+  <router-outlet></router-outlet>
+  
 </div>
 
 

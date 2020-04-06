@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MatDialog, MatDialogConfig } from '@angular/material'
-import { DataTableDataSource, DataTableItem } from './data-table-datasource';
+import { ExpenseTypeDataSource, DataTableItem } from './expense-type-datasource';
 import { ExpenseTypesService } from '../services/expense-types.service';
 import { ExpenseFormService } from '../services/expense-form-service.service';
 import { ExpenseType } from '../ExpenseType';
@@ -12,20 +12,19 @@ import { ExpenseFormComponent } from '../expense-form/expense-form.component';
 import { NotificationService } from '../services/notification.service';
 
 @Component({
-  selector: 'app-data-table',
-  templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.css']
+  selector: 'app-expense-types-list',
+  templateUrl: './expense-types-list.component.html',
+  styleUrls: ['./expense-types-list.component.css']
 })
-export class DataTableComponent implements AfterViewInit, OnInit {
+export class ExpenseTypesListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatTable, {static: false}) table: MatTable<DataTableItem>;
-  dataSource: DataTableDataSource;
+  dataSource: ExpenseTypeDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['Id', 'ExpenseType', 'Value', 'Date', 'Comment', 'Actions'];
-  expenseTypes: ExpenseType[] = [];
-  expenses: DataTableItem[] = [];
+  displayedColumns = ['Id', 'Name', 'Comment', 'Actions'];
+  expenseTypes: DataTableItem[] = [];
   searchKey: string = "";
 
   constructor(private expenseTypesService: ExpenseTypesService, 
@@ -35,25 +34,19 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new DataTableDataSource();
+    this.dataSource = new ExpenseTypeDataSource();
     this.expenseTypesService.getAllExpenseTypes().subscribe((res: ExpenseType[]) => {
-      this.expenseTypes = res;
-      //console.log("The actual data: "+ this.expenseTypes);
-    });
-
-    this.expenseTypesService.getAllExpenses().subscribe((res: Expense[]) => {
-      for(let i = 0; i < res.length; i++){
-        let expenseType = this.expenseTypes.find(x => x.id == res[i].expenseTypeId).name;
-        let expense: DataTableItem = {
-          Id: res[i].id, 
-          ExpenseType: expenseType, 
-          Value: res[i].value, 
-          Date: res[i].date, 
+      //this.expenseTypes = res;
+      for(let i=0; i< res.length; i++){
+        let expenseType: DataTableItem = {
+          Id: res[i].id,
+          Name: res[i].name,
           Comment: res[i].comment
         };
-        this.expenses[i] = expense;
+        this.expenseTypes[i] = expenseType;
       }
-      this.dataSource.data = this.expenses;
+
+      //console.log("The actual data: "+ this.expenseTypes);
     });
     
   }
@@ -93,4 +86,5 @@ export class DataTableComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
   }
+
 }

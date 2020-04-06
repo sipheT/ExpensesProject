@@ -8,12 +8,16 @@ import { DataTableComponent } from './data-table/data-table.component';
 import { ExpenseFormComponent } from './expense-form/expense-form.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
+import { ExpenseTypesListComponent } from './expense-types-list/expense-types-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExpenseFormComponent,
-    DataTableComponent
+    DataTableComponent,
+    ExpenseTypesListComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +25,9 @@ import { MaterialModule } from './material/material.module';
     ReactiveFormsModule,
     NoopAnimationsModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    AppRoutingModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent],

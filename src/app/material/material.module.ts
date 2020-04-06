@@ -25,7 +25,7 @@ import * as Material from '@angular/material';
     Material.MatNativeDateModule,
     Material.MatButtonModule,
     Material.MatSnackBarModule,
-    Material.MatIconModule
+    Material.MatIconModule,
   ],
   exports: [
     Material.MatToolbarModule,
